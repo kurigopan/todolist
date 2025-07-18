@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal } from "@mui/material";
+import { Modal, TextField, MenuItem } from "@mui/material";
 import { Category, Todo } from "../types/todo";
 import { Status } from "../types/status";
 
@@ -19,7 +19,7 @@ type Props = {
     status: Status;
   }) => void; // Optional for edit mode
   onClose: () => void;
-  mode: "new" | "edit";
+  mode: "NEW" | "EDIT";
   todo?: Todo; // Optional for edit mode
 };
 
@@ -33,20 +33,20 @@ export const BaseTodoModal: React.FC<Props> = ({
 }) => {
   const [title, setTitle] = useState(todo ? todo.title : "");
   const [category, setCategory] = useState<Category>(
-    todo ? todo.category : "仕事"
+    todo ? todo.category : "WORK"
   );
-  const [dueDate, setDueDate] = useState(todo ? todo.dueDate : new Date());
+  const [dueDate, setDueDate] = useState<Date | undefined>(todo?.dueDate);
   const [status, setStatus] = useState<Status>(todo ? todo.status : "TODO");
 
   const handleSubmit = () => {
-    if (mode === "new" && onAdd) {
+    if (mode === "NEW" && onAdd) {
       onAdd({ title, category, dueDate, status });
-    } else if (mode === "edit" && todo && onEdit) {
+    } else if (mode === "EDIT" && todo && onEdit) {
       onEdit({ id: todo.id, title, category, dueDate, status });
     }
     onClose(); // モーダルを閉じる
   };
-  const modeText = mode === "new" ? "追加" : "更新";
+  const modeText = mode === "NEW" ? "追加" : "更新";
 
   return (
     <Modal
@@ -56,58 +56,79 @@ export const BaseTodoModal: React.FC<Props> = ({
     >
       <div className="flex flex-col items-center gap-4 p-8 bg-white rounded">
         <h2 className="text-lg font-semibold text-black">TODOの{modeText}</h2>
-        <form className="flex flex-col gap-2">
-          <input
-            type="text"
-            placeholder="TODO"
+        <form className="flex flex-col gap-4">
+          <TextField
+            label="TODO"
+            variant="outlined"
+            fullWidth
             value={title}
-            className="border p-2 rounded placeholder-gray-400"
             onChange={(e) => setTitle(e.target.value)}
+            InputProps={{
+              style: { color: "#000" },
+            }}
+            InputLabelProps={{
+              style: { color: "#555" },
+            }}
           />
-          <input
+          <TextField
+            label="期限"
             type="date"
-            placeholder="期限"
+            variant="outlined"
+            fullWidth
             value={dueDate ? dueDate.toISOString().split("T")[0] : ""}
-            className="border p-2 rounded placeholder-gray-400"
-            onChange={(e) => setDueDate(new Date(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value;
+              setDueDate(value ? new Date(value) : undefined);
+            }}
+            InputProps={{
+              style: { color: "#000" },
+            }}
+            InputLabelProps={{
+              style: { color: "#555" },
+              shrink: true, // ← これがないと日付型ラベルが被る
+            }}
           />
-          <select
-            className="block border p-2 rounded placeholder-gray-400"
-            onChange={(e) => setCategory(e.target.value as Category)}
+          <TextField
+            select
+            label="カテゴリ"
             value={category}
+            onChange={(e) => setCategory(e.target.value as Category)}
+            fullWidth
           >
-            <option>仕事</option>
-            <option>家事</option>
-            <option>プライベート</option>
-          </select>
-          <select
-            className="block border p-2 rounded placeholder-gray-400"
+            <MenuItem value="WORK">仕事</MenuItem>
+            <MenuItem value="HOUSEWORK">家事</MenuItem>
+            <MenuItem value="PRIVATE">プライベート</MenuItem>
+          </TextField>
+          <TextField
+            select
+            label="ステータス"
+            value={status}
             onChange={(e) => setStatus(e.target.value as Status)}
+            fullWidth
           >
-            <option value="TODO">未完了</option>
-            <option value="IN PROGRESS">進行中</option>
-            <option value="DONE">完了</option>
-          </select>
-
-          <div className="flex gap-2">
-            {/* フォーム閉じるボタン */}
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-red-300 text-white px-4 py-2 rounded hover:bg-gray-500"
-            >
-              キャンセル
-            </button>
-            {/* TODO追加ボタン */}
-            <button
-              type="submit"
-              className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-gray-500"
-              onClick={handleSubmit}
-            >
-              {modeText}
-            </button>
-          </div>
+            <MenuItem value="TODO">未完了</MenuItem>
+            <MenuItem value="IN PROGRESS">進行中</MenuItem>
+            <MenuItem value="DONE">完了</MenuItem>
+          </TextField>
         </form>
+        <div className="flex justify-between w-full">
+          {/* キャンセルボタン（フォーム閉じる） */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-red-300 text-white px-4 py-2 rounded hover:bg-gray-500"
+          >
+            キャンセル
+          </button>
+          {/* 追加ボタン */}
+          <button
+            type="submit"
+            className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-gray-500"
+            onClick={handleSubmit}
+          >
+            {modeText}
+          </button>
+        </div>
       </div>
     </Modal>
   );

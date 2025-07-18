@@ -8,6 +8,6 @@ export type Todo = {
   category: Category;
 };
 
-export type Category = "仕事" | "家事" | "プライベート";
+export type Category = "WORK" | "HOUSEWORK" | "PRIVATE";
 
 export type DueDateFilter = "ALL" | "TODAY" | "WEEK" | "OVERDUE";

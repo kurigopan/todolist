@@ -29,7 +29,7 @@ export default function Home() {
       title: input.title,
       category: input.category,
       dueDate: input.dueDate,
-      status: "TODO",
+      status: input.status,
     };
 
     setTodos([...todos, todo]);
@@ -44,7 +44,6 @@ export default function Home() {
 
   const handleDelete = (id: string) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
-    // console.log(newTodos);
     setTodos(newTodos);
   };
 
@@ -55,11 +54,8 @@ export default function Home() {
 
     const today = new Date();
     const dueDate = new Date(todo.dueDate);
-
-    // 時間を無視して日付だけ比較するために0時にリセット
     const resetTime = (date: Date) =>
       new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
     const todayDate = resetTime(today);
     const dueDateOnly = resetTime(dueDate);
 

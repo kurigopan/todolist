@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Todo } from "../types/todo";
+import { Todo, Category } from "../types/todo";
 import { EditTodoModal } from "./EditTodoModal";
 
 type Props = {
@@ -11,9 +11,9 @@ type Props = {
 };
 
 const categoryClass = {
-  仕事: "bg-blue-100 text-blue-700",
-  家事: "bg-green-100 text-green-700",
-  プライベート: "bg-pink-100 text-pink-700",
+  WORK: "bg-blue-100 text-blue-700",
+  HOUSEWORK: "bg-green-100 text-green-700",
+  PRIVATE: "bg-pink-100 text-pink-700",
 };
 
 export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
@@ -23,6 +23,14 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
   };
 
   const { id, title, dueDate, category } = todo;
+
+  const categoryMap: Record<Category, string> = {
+    WORK: "仕事",
+    HOUSEWORK: "家事",
+    PRIVATE: "プライベート",
+  };
+
+  const categoryText = (category: Category): string => categoryMap[category];
 
   return (
     <div>
@@ -58,7 +66,7 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
               <span
                 className={`ml-2 text-xs px-2 py-1 rounded-full ${categoryClass[category]}`}
               >
-                {category}
+                {categoryText(category)}
               </span>
               <p className="text-sm text-gray-600">
                 {dueDate?.toLocaleDateString()}
