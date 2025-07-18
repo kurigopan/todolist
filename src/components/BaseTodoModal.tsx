@@ -35,7 +35,7 @@ export const BaseTodoModal: React.FC<Props> = ({
   const [category, setCategory] = useState<Category>(
     todo ? todo.category : "仕事"
   );
-  const [dueDate, setDueDate] = useState(todo ? todo.dueDate : new Date());
+  const [dueDate, setDueDate] = useState<Date | undefined>(todo?.dueDate);
   const [status, setStatus] = useState<Status>(todo ? todo.status : "TODO");
 
   const handleSubmit = () => {
@@ -69,7 +69,10 @@ export const BaseTodoModal: React.FC<Props> = ({
             placeholder="期限"
             value={dueDate ? dueDate.toISOString().split("T")[0] : ""}
             className="border p-2 rounded placeholder-gray-400"
-            onChange={(e) => setDueDate(new Date(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value;
+              setDueDate(value ? new Date(value) : undefined);
+            }}
           />
           <select
             className="block border p-2 rounded placeholder-gray-400"
