@@ -1,8 +1,14 @@
+"use client"; /* ドラッグ&ドロップ */
+
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Todo, Category } from "../types/todo";
 import { EditTodoModal } from "./EditTodoModal";
+
+/* ドラッグ&ドロップ */
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
   todo: Todo;
@@ -18,11 +24,11 @@ const categoryClass = {
 
 export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const { id, title, dueDate, category } = todo;
+
   const handleToggleForm = () => {
     setIsFormVisible((prev) => !prev);
   };
-
-  const { id, title, dueDate, category } = todo;
 
   const categoryMap: Record<Category, string> = {
     WORK: "仕事",
@@ -32,13 +38,29 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
 
   const categoryText = (category: Category): string => categoryMap[category];
 
+  /* ドラッグ&ドロップ */
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: todo.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+  };
+
   return (
     <div>
       <ul className="space-y-2">
-        <li className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move">
+        <li
+          /* ドラッグ&ドロップ */
+          ref={setNodeRef}
+          style={style}
+          className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move"
+        >
           <div className="flex-1">
             <div className="flex items-center justify-between space-x-2">
-              <div className="font-bold p-3">{title}</div>
+              <div {...listeners} {...attributes} className="font-bold p-3">
+                {title}
+              </div>
               <div className="flex items-center">
                 <button
                   onClick={handleToggleForm}
@@ -55,7 +77,9 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
                   />
                 )}
                 <button
-                  onClick={() => handleDelete(id)}
+                  onClick={() => {
+                    handleDelete(id);
+                  }}
                   className="text-sm hover:text-gray-800"
                 >
                   <DeleteIcon />

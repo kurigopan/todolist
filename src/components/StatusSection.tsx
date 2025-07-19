@@ -3,12 +3,17 @@ import { Status } from "../types/status";
 import { TodoCard } from "./TodoCard";
 import React, { useEffect } from "react";
 
+/* ドラッグ&ドロップ */
+import { useDroppable } from "@dnd-kit/core";
+
 type Props = {
   backgroundColor: string;
   status: Status;
   todos: Todo[];
   onEdit: (input: Todo) => void;
   handleDelete: (id: string) => void;
+  isDragging: boolean;
+  draggedTodoId?: string;
 };
 
 export const StatusSection: React.FC<Props> = ({
@@ -17,13 +22,29 @@ export const StatusSection: React.FC<Props> = ({
   todos,
   onEdit,
   handleDelete,
+  isDragging,
+  draggedTodoId,
 }) => {
   useEffect(() => {
-    console.log(todos);
+    console.log("todos", todos);
   }, [todos]);
 
+  useEffect(() => {
+    console.log("isDragging", isDragging);
+    console.log("draggedTodoId", draggedTodoId);
+  }, [isDragging, draggedTodoId]);
+
+  /* ドラッグ&ドロップ */
+  const { setNodeRef, isOver } = useDroppable({
+    id: status,
+  });
+
   return (
-    <div className="bg-gray-200 p-4 rounded shadow">
+    <div
+      /* ドラッグ&ドロップ */
+      ref={setNodeRef}
+      className={`p-4 rounded shadow ${isOver ? "bg-blue-100" : "bg-gray-200"}`}
+    >
       <div className="flex items-center text-lg font-bold mb-4">
         <h2 className="text-xl font-semibold">{status}</h2>
         <div
@@ -41,6 +62,8 @@ export const StatusSection: React.FC<Props> = ({
             handleDelete={handleDelete}
           />
         ))}
+        {/* // プレースホルダー表示 */}
+        {isDragging && draggedTodoId && <div style={{ height: "104px" }} />}
       </div>
     </div>
   );
