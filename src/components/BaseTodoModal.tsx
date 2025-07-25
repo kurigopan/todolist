@@ -63,12 +63,12 @@ export const BaseTodoModal: React.FC<Props> = ({
             fullWidth
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            InputProps={{
-              style: { color: "#000" },
-            }}
-            InputLabelProps={{
-              style: { color: "#555" },
-            }}
+            // InputProps={{
+            //   style: { color: "#000" },
+            // }}
+            // InputLabelProps={{
+            //   style: { color: "#555" },
+            // }}
           />
           <TextField
             label="期限"
