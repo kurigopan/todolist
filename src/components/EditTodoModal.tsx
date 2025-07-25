@@ -1,11 +1,11 @@
-import { Todo } from "../types/todo";
 import { BaseTodoModal } from "./BaseTodoModal";
+import { Todo } from "../types/todo";
 
 type Props = {
   isFormVisible: boolean;
-  onEdit: (input: Todo) => void; // Optional for edit mode
+  onEdit: (input: Todo) => void;
   onClose: () => void;
-  todo: Todo; // The todo item to edit
+  todo: Todo;
 };
 
 export const EditTodoModal: React.FC<Props> = ({

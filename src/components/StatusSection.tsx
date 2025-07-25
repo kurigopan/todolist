@@ -1,10 +1,8 @@
-import { Todo } from "../types/todo";
-import { Status } from "../types/status";
-import { TodoCard } from "./TodoCard";
 import React, { useEffect } from "react";
-
-/* ドラッグ&ドロップ */
 import { useDroppable } from "@dnd-kit/core";
+
+import { TodoCard } from "./TodoCard";
+import { Todo, Status } from "../types/todo";
 
 type Props = {
   backgroundColor: string;
@@ -34,14 +32,12 @@ export const StatusSection: React.FC<Props> = ({
     console.log("draggedTodoId", draggedTodoId);
   }, [isDragging, draggedTodoId]);
 
-  /* ドラッグ&ドロップ */
   const { setNodeRef, isOver } = useDroppable({
     id: status,
   });
 
   return (
     <div
-      /* ドラッグ&ドロップ */
       ref={setNodeRef}
       className={`p-4 rounded shadow ${isOver ? "bg-blue-100" : "bg-gray-200"}`}
     >
@@ -62,7 +58,6 @@ export const StatusSection: React.FC<Props> = ({
             handleDelete={handleDelete}
           />
         ))}
-        {/* // プレースホルダー表示 */}
         {isDragging && draggedTodoId && <div style={{ height: "104px" }} />}
       </div>
     </div>

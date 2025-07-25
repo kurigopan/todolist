@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, TextField, MenuItem } from "@mui/material";
-import { Category, Todo } from "../types/todo";
-import { Status } from "../types/status";
+
+import { Todo, Status, Category } from "../types/todo";
 
 type Props = {
   isFormVisible: boolean;
@@ -80,11 +80,11 @@ export const BaseTodoModal: React.FC<Props> = ({
               const value = e.target.value;
               setDueDate(value ? new Date(value) : undefined);
             }}
-            // InputProps={{
-            //   style: { color: "#000" },
-            // }}
+            InputProps={{
+              style: { color: "#000" },
+            }}
             InputLabelProps={{
-              // style: { color: "#555" },
+              style: { color: "#555" },
               shrink: true, // ← これがないと日付型ラベルが被る
             }}
           />

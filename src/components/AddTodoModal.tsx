@@ -1,6 +1,5 @@
-import { Category } from "../types/todo";
 import { BaseTodoModal } from "./BaseTodoModal";
-import { Status } from "../types/status";
+import { Status, Category } from "../types/todo";
 
 type Props = {
   isFormVisible: boolean;

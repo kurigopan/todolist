@@ -1,17 +1,16 @@
-"use client"; /* ドラッグ&ドロップ */
+"use client";
 
-import { Todo } from "../types/todo";
-import { Status } from "../types/status";
-import { StatusSection } from "./StatusSection";
-import { TodoCard } from "./TodoCard";
-/* ドラッグ&ドロップ */
+import { useState } from "react";
 import {
   DndContext,
   DragEndEvent,
   DragStartEvent,
   DragOverlay,
 } from "@dnd-kit/core";
-import { useState } from "react";
+
+import { StatusSection } from "./StatusSection";
+import { TodoCard } from "./TodoCard";
+import { Todo, Status } from "../types/todo";
 
 type Props = {
   todos: Todo[];
@@ -32,7 +31,6 @@ export const TodoBoard: React.FC<Props> = ({
   onEdit,
   handleDelete,
 }) => {
-  /* ドラッグ&ドロップ */
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {

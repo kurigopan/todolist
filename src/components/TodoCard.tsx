@@ -1,14 +1,13 @@
-"use client"; /* ドラッグ&ドロップ */
+"use client";
 
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Todo, Category } from "../types/todo";
-import { EditTodoModal } from "./EditTodoModal";
-
-/* ドラッグ&ドロップ */
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+
+import { EditTodoModal } from "./EditTodoModal";
+import { Todo, Category } from "../types/todo";
 
 type Props = {
   todo: Todo;
@@ -38,7 +37,6 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
 
   const categoryText = (category: Category): string => categoryMap[category];
 
-  /* ドラッグ&ドロップ */
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: todo.id,
   });
@@ -51,7 +49,6 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
     <div>
       <ul className="space-y-2">
         <li
-          /* ドラッグ&ドロップ */
           ref={setNodeRef}
           style={style}
           className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move"

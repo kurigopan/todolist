@@ -1,5 +1,3 @@
-import { Status } from "./status";
-
 export type Todo = {
   id: string;
   title: string;
@@ -7,6 +5,7 @@ export type Todo = {
   dueDate?: Date;
   category: Category;
 };
+export type Status = "TODO" | "IN PROGRESS" | "DONE";
 
 export type Category = "WORK" | "HOUSEWORK" | "PRIVATE";
 

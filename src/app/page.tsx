@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+
 import { TodoBoard } from "../components/TodoBoard";
 import { AddTodoModal } from "../components/AddTodoModal";
-import { Todo, Category, DueDateFilter } from "../types/todo";
-import { Status } from "../types/status";
+import { Todo, Status, Category, DueDateFilter } from "../types/todo";
 
 export default function Home() {
   const [isFormVisible, setIsFormVisible] = useState(false);
