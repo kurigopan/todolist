@@ -7,6 +7,7 @@ import {
   DragStartEvent,
   DragOverlay,
 } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 
 import { StatusSection } from "./StatusSection";
 import { TodoCard } from "./TodoCard";
@@ -44,14 +45,28 @@ export const TodoBoard: React.FC<Props> = ({
     const { active, over } = event;
     if (!over) return;
 
-    const activeId = active.id as string;
-    const overStatus = over.id as Status;
-
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === activeId ? { ...todo, status: overStatus } : todo
-      )
-    );
+    // ドロップ先がTodoカードの場合
+    const overTodo = todos.find((todo) => todo.id === over.id);
+    if (overTodo) {
+      // ステータスが同じなら並べ替え、違えば移動＋並べ替え
+      setTodos((prev) => {
+        const oldIndex = prev.findIndex((todo) => todo.id === active.id);
+        const newIndex = prev.findIndex((todo) => todo.id === over.id);
+        const updated = [...prev];
+        // ステータス変更
+        updated[oldIndex] = { ...updated[oldIndex], status: overTodo.status };
+        // 並べ替え
+        return arrayMove(updated, oldIndex, newIndex);
+      });
+    } else {
+      // ドロップ先がカラム（StatusSection）の場合
+      const overStatus = over.id as Status;
+      setTodos((prev) =>
+        prev.map((todo) =>
+          todo.id === active.id ? { ...todo, status: overStatus } : todo
+        )
+      );
+    }
     setActiveTodo(null);
   };
 

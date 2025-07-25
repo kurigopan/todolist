@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
 import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 import { TodoCard } from "./TodoCard";
 import { Todo, Status } from "../types/todo";
@@ -49,17 +53,22 @@ export const StatusSection: React.FC<Props> = ({
           {todos.length}
         </div>
       </div>
-      <div className="space-y-3">
-        {todos.map((todo) => (
-          <TodoCard
-            key={todo.id}
-            todo={todo}
-            onEdit={onEdit}
-            handleDelete={handleDelete}
-          />
-        ))}
-        {isDragging && draggedTodoId && <div style={{ height: "104px" }} />}
-      </div>
+      <SortableContext
+        items={todos.map((todo) => todo.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="space-y-3">
+          {todos.map((todo) => (
+            <TodoCard
+              key={todo.id}
+              todo={todo}
+              onEdit={onEdit}
+              handleDelete={handleDelete}
+            />
+          ))}
+          {isDragging && draggedTodoId && <div style={{ height: "104px" }} />}
+        </div>
+      </SortableContext>
     </div>
   );
 };

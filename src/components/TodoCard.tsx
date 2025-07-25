@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
 
 import { EditTodoModal } from "./EditTodoModal";
 import { Todo, Category } from "../types/todo";
@@ -37,12 +37,21 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
 
   const categoryText = (category: Category): string => categoryMap[category];
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: todo.id,
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
