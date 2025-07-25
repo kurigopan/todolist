@@ -62,12 +62,16 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
           style={style}
           className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move"
         >
-          <div className="flex-1">
-            <div className="flex items-center justify-between space-x-2">
-              <div {...listeners} {...attributes} className="font-bold p-3">
+          <div className="flex-1 space-y-1">
+            <div className="flex items-center justify-between min-w-0">
+              <div
+                {...listeners}
+                {...attributes}
+                className="font-bold p-3 break-all"
+              >
                 {title}
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center flex-shrink-0">
                 <button
                   onClick={handleToggleForm}
                   className="text-sm hover:text-gray-800"
