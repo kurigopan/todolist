@@ -23,7 +23,7 @@ export const AddTodoModal: React.FC<Props> = ({
       isFormVisible={isFormVisible}
       onAdd={onAdd}
       onClose={onClose}
-      mode="new"
+      mode="NEW"
     />
   );
 };

@@ -20,7 +20,7 @@ export const EditTodoModal: React.FC<Props> = ({
       onEdit={onEdit}
       todo={todo}
       onClose={onClose}
-      mode="edit"
+      mode="EDIT"
     />
   );
 };

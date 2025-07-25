@@ -1,8 +1,14 @@
+"use client"; /* ドラッグ&ドロップ */
+
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Todo } from "../types/todo";
+import { Todo, Category } from "../types/todo";
 import { EditTodoModal } from "./EditTodoModal";
+
+/* ドラッグ&ドロップ */
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
   todo: Todo;
@@ -11,26 +17,50 @@ type Props = {
 };
 
 const categoryClass = {
-  仕事: "bg-blue-100 text-blue-700",
-  家事: "bg-green-100 text-green-700",
-  プライベート: "bg-pink-100 text-pink-700",
+  WORK: "bg-blue-100 text-blue-700",
+  HOUSEWORK: "bg-green-100 text-green-700",
+  PRIVATE: "bg-pink-100 text-pink-700",
 };
 
 export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const { id, title, dueDate, category } = todo;
+
   const handleToggleForm = () => {
     setIsFormVisible((prev) => !prev);
   };
 
-  const { id, title, dueDate, category } = todo;
+  const categoryMap: Record<Category, string> = {
+    WORK: "仕事",
+    HOUSEWORK: "家事",
+    PRIVATE: "プライベート",
+  };
+
+  const categoryText = (category: Category): string => categoryMap[category];
+
+  /* ドラッグ&ドロップ */
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: todo.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+  };
 
   return (
     <div>
       <ul className="space-y-2">
-        <li className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move">
+        <li
+          /* ドラッグ&ドロップ */
+          ref={setNodeRef}
+          style={style}
+          className="bg-white p-4 rounded shadow flex items-center gap-4 cursor-move"
+        >
           <div className="flex-1">
             <div className="flex items-center justify-between space-x-2">
-              <div className="font-bold p-3">{title}</div>
+              <div {...listeners} {...attributes} className="font-bold p-3">
+                {title}
+              </div>
               <div className="flex items-center">
                 <button
                   onClick={handleToggleForm}
@@ -47,7 +77,9 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
                   />
                 )}
                 <button
-                  onClick={() => handleDelete(id)}
+                  onClick={() => {
+                    handleDelete(id);
+                  }}
                   className="text-sm hover:text-gray-800"
                 >
                   <DeleteIcon />
@@ -58,7 +90,7 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
               <span
                 className={`ml-2 text-xs px-2 py-1 rounded-full ${categoryClass[category]}`}
               >
-                {category}
+                {categoryText(category)}
               </span>
               <p className="text-sm text-gray-600">
                 {dueDate?.toLocaleDateString()}
