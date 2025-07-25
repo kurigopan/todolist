@@ -25,6 +25,11 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { id, title, dueDate, category } = todo;
 
+  const isOverdue = (dueDate?: Date): boolean => {
+    if (!dueDate) return false;
+    return dueDate.getTime() < new Date().getTime();
+  };
+
   const handleToggleForm = () => {
     setIsFormVisible((prev) => !prev);
   };
@@ -102,7 +107,11 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
               >
                 {categoryText(category)}
               </span>
-              <p className="text-sm text-gray-600">
+              <p
+                className={
+                  isOverdue(dueDate) ? "text-red-400" : "text-gray-600"
+                }
+              >
                 {dueDate?.toLocaleDateString()}
               </p>
             </div>
