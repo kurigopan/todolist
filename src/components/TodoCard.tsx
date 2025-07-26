@@ -23,7 +23,7 @@ const categoryClass = {
 
 export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const { id, title, dueDate, category } = todo;
+  const { id, title, status, dueDate, category } = todo;
 
   const isOverdue = (dueDate?: Date): boolean => {
     if (!dueDate) return false;
@@ -109,7 +109,9 @@ export const TodoCard: React.FC<Props> = ({ todo, onEdit, handleDelete }) => {
               </span>
               <p
                 className={
-                  isOverdue(dueDate) ? "text-red-400" : "text-gray-600"
+                  isOverdue(dueDate) && status != "DONE"
+                    ? "text-red-400"
+                    : "text-gray-600"
                 }
               >
                 {dueDate?.toLocaleDateString()}
