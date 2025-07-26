@@ -43,7 +43,11 @@ export const TodoBoard: React.FC<Props> = ({
   };
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over) return;
+    if (!over) {
+      // ドロップ先が存在しない → 枠外に落とした → 元に戻す（stateは変更しない）
+      setActiveTodo(null); // UIをリセット
+      return;
+    }
 
     // ドロップ先がTodoカードの場合
     const overTodo = todos.find((todo) => todo.id === over.id);
