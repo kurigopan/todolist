@@ -104,7 +104,6 @@ export default function Home() {
           )}
         </div>
       </div>
-
       {/* ステータスごとの表示エリア */}
       <TodoBoard
         todos={filteredTodos}
