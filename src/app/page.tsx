@@ -4,12 +4,13 @@ import React, { useState } from "react";
 
 import { TodoBoard } from "../components/TodoBoard";
 import { AddTodoModal } from "../components/AddTodoModal";
-import { Todo, Status, Category, DueDateFilter } from "../types/todo";
+import { DueDateFilter } from "../components/DueDateFilter";
+import { Todo, Status, Category, DueDate } from "../types/todo";
 
 export default function Home() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<DueDateFilter>("ALL");
+  const [filter, setFilter] = useState<DueDate>("ALL");
 
   const handleToggleForm = () => {
     setIsFormVisible((prev) => !prev);
@@ -83,16 +84,7 @@ export default function Home() {
 
         <div className="flex gap-4">
           {/* フィルターセレクトボックス */}
-          <select
-            className="block ml-auto border px-4 py-2 rounded"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as DueDateFilter)}
-          >
-            <option value="ALL">すべて</option>
-            <option value="TODAY">今日中</option>
-            <option value="WEEK">1週間以内</option>
-            <option value="OVERDUE">期限切れ</option>
-          </select>
+          <DueDateFilter filter={filter} setFilter={setFilter} />
           {/* 新規追加ボタン */}
           {!isFormVisible && (
             <button
